@@ -1,0 +1,7 @@
+# mongodb python interface
+pymongo
+bs4
+requests
+lxml
+urllib2
+flask
