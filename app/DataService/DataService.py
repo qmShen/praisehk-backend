@@ -48,14 +48,14 @@ class DataService:
                 'feature': 'PM25',
                 'value': PM25_df.to_dict('records')
             },
-            {
-                'feature': 'wind',
-                'value': wind_df.to_dict('records')
-            },
-            {
-                'feature': 'windDir',
-                'value': winddir_df.to_dict('records')
-            }
+            # {
+            #     'feature': 'wind',
+            #     'value': wind_df.to_dict('records')
+            # },
+            # {
+            #     'feature': 'windDir',
+            #     'value': winddir_df.to_dict('records')
+            # }
         ]
 
         return data
