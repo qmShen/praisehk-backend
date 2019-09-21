@@ -29,6 +29,8 @@ class DataService:
         Hard code
         """
         self.region_df = pd.read_csv(path)
+        with open('./config/config.json') as f:
+            self.config = json.load(f)
         # self.region_dicts = self.region_df.drop(columns=['col_index', 'row_index']).to_dict('records')
         self.region_dicts = self.region_df.to_dict('records')
     def get_regions(self):
@@ -66,7 +68,14 @@ class DataService:
         PM25_df.fillna('null', inplace=True)
         return PM25_df.to_dict('records')
 
+    def read_aq_stations(self):
+        aq_stations_df = pd.read_csv(self.config["aq_stations_path"])
+        return aq_stations_df.to_dict('records')
+
+    def read_mete_stations(self):
+        mete_stations_df = pd.read_csv(self.config["mete_stations_path"])
+        return mete_stations_df.to_dict('records')
 
 if __name__ == '__main__':
-    dataService = DataService(None)
-    dataService.get_recent_records(0, 100)
+    dataService = DataService()
+    dataService.read_aq_stations()

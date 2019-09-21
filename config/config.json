@@ -1,0 +1,4 @@
+{
+    "aq_stations_path" : "./data/aq_stations.csv",
+    "mete_stations_path" : "./data/mete_stations.csv"
+}

@@ -38,5 +38,18 @@ def get_cmaq_obs_data():
     print('Get region sector ', post_data)
     data = dataService.read_station_cmaq_obs(post_data['station_id'])
     return json.dumps(data)
+
+
+
+@app.route('/aq_stations')
+def get_aq_stations():
+    data = dataService.read_aq_stations()
+    return json.dumps(data)
+
+@app.route('/mete_stations')
+def get_mete_stations():
+    data = dataService.read_mete_stations()
+    return json.dumps(data)
+
 if __name__ == '__main__':
     pass
