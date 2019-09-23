@@ -36,7 +36,11 @@ def get_feature_data():
 def get_cmaq_obs_data():
     post_data = json.loads(request.data.decode())
     print('Get region sector ', post_data)
+    print(post_data)
     data = dataService.read_station_cmaq_obs(post_data['station_id'])
     return json.dumps(data)
+
+
+
 if __name__ == '__main__':
     pass
