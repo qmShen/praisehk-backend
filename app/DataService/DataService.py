@@ -77,13 +77,18 @@ class DataService:
         }
 
 
-    def read_feature_data(self):
+    def read_feature_data(self, start_time = None, end_time = None):
         wind_df = pd.read_csv(wind_path_3km)
         PM25_df = pd.read_csv(PM25_path_3km)
         winddir_df = pd.read_csv(winddir_path_3km)
         wind_df.fillna('null', inplace = True)
         PM25_df.fillna('null', inplace = True)
         winddir_df.fillna('null', inplace = True)
+        print('result', start_time, end_time)
+        if start_time is not None and end_time is not None:
+            PM25_df = PM25_df[(PM25_df['timestamp'] >= start_time) & (PM25_df['timestamp'] <= end_time)]
+            wind_df = wind_df[(wind_df['timestamp'] >= start_time) & (wind_df['timestamp'] <= end_time)]
+            winddir_df = winddir_df[(winddir_df['timestamp'] >= start_time) & (winddir_df['timestamp'] <= end_time)]
 
         data = [
             {

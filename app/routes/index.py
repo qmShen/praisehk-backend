@@ -20,10 +20,14 @@ def getregion():
     print('run here')
     return json.dumps(dataService.get_regions())
 
-@app.route('/feature_data')
+@app.route('/feature_data', methods = ['POST'])
 def get_feature_data():
     start_time = time.time()
-    data = dataService.read_feature_data()
+    post_data = json.loads(request.data.decode())
+    print('Time range !!!!!!!!!!: ', post_data)
+    st = post_data['startTime'] if 'startTime' in post_data else None
+    et = post_data['endTime'] if 'endTime' in post_data else None
+    data = dataService.read_feature_data(st, et)
     print("Use timex", time.time() - start_time)
     # print(data)
     return json.dumps(data)
@@ -59,7 +63,7 @@ def read_mete_stations():
 @app.route('/load_observation', methods = ['POST'])
 def read_AQ_by_station():
     post_data = json.loads(request.data.decode())
-    print('Post data 1', post_data)
+    # print('Post data 1', post_data)
     st = post_data['startTime'] if 'startTime' in post_data else None
     et = post_data['endTime'] if 'endTime' in post_data else None
     start_time = time.time()
@@ -74,10 +78,10 @@ def read_AQ_by_station():
 
 @app.route('/load_model_value', methods = ['POST'])
 def read_CMAQ_by_station():
-    print('--------------------------------------')
-    print(request.data.decode())
+    # print('--------------------------------------')
+    # print(request.data.decode())
     post_data = json.loads(request.data.decode())
-    print('Post data 2', post_data)
+    # print('Post data 2', post_data)
     st = post_data['startTime'] if 'startTime' in post_data else None
     et = post_data['endTime'] if 'endTime' in post_data else None
     start_time = time.time()
