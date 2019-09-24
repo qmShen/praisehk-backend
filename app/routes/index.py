@@ -59,14 +59,16 @@ def read_mete_stations():
 @app.route('/load_observation', methods = ['POST'])
 def read_AQ_by_station():
     post_data = json.loads(request.data.decode())
-    print('Post data', post_data)
+    print('Post data 1', post_data)
+    st = post_data['startTime'] if 'startTime' in post_data else None
+    et = post_data['endTime'] if 'endTime' in post_data else None
     start_time = time.time()
     if post_data['feature'] == 'PM25':
-        data = dataService.read_AQ_by_stations()
+        data = dataService.read_AQ_by_stations(st, et)
     elif post_data['feature'] == 'wind':
-        data = dataService.read_wind_by_stations()
+        data = dataService.read_wind_by_stations(st, et)
     elif post_data['feature'] == 'winddir':
-        data = dataService.read_winddir_by_stations()
+        data = dataService.read_winddir_by_stations(st, et)
     print('model {}: '.format(post_data['feature']), time.time() - start_time)
     return json.dumps(data)
 
@@ -75,14 +77,16 @@ def read_CMAQ_by_station():
     print('--------------------------------------')
     print(request.data.decode())
     post_data = json.loads(request.data.decode())
-    print('Post data', post_data)
+    print('Post data 2', post_data)
+    st = post_data['startTime'] if 'startTime' in post_data else None
+    et = post_data['endTime'] if 'endTime' in post_data else None
     start_time = time.time()
     if post_data['feature'] == 'PM25':
-        data = dataService.read_CMAQ_by_stations()
+        data = dataService.read_CMAQ_by_stations(st, et)
     elif post_data['feature'] == 'wind':
-        data = dataService.read_wind_WRF_by_stations()
+        data = dataService.read_wind_WRF_by_stations(st, et)
     elif post_data['feature'] == 'winddir':
-        data = dataService.read_winddir_WRF_by_stations()
+        data = dataService.read_winddir_WRF_by_stations(st, et)
 
     print('model {}: '.format(post_data['feature']), time.time() - start_time)
     return json.dumps(data)

@@ -108,79 +108,87 @@ class DataService:
         PM25_df.fillna('null', inplace=True)
         return PM25_df.to_dict('records')
 
-    def read_AQ_by_stations(self):
+    def read_AQ_by_stations(self, start_time = None, end_time = None):
         """
         :return:
         """
         _temp_path = './data/PM25_obs_by_stations.csv'
-        if self.pm25_json is None:
-            PM25_df = pd.read_csv(_temp_path)
-            PM25_df.fillna('null', inplace=True)
-            self.pm25_json = PM25_df.to_dict('records')
-        return self.pm25_json
 
-    def read_CMAQ_by_stations(self):
+        PM25_df = pd.read_csv(_temp_path)
+        PM25_df.fillna('null', inplace=True)
+        print('start_time, end_time', start_time, end_time)
+        if start_time is not None and end_time is not None:
+            PM25_df = PM25_df[(PM25_df['timestamp'] >= start_time) & (PM25_df['timestamp'] <= end_time)]
+            print('t', PM25_df.shape)
+        PM_json = PM25_df.to_dict('records')
+        return PM_json
+
+    def read_CMAQ_by_stations(self, start_time = None, end_time = None):
         """
         :return:
         """
         _temp_path = './data/PM25_CMAQ_by_stations.csv'
-        if self.pm25_cmaq_json is None:
-            PM25_df = pd.read_csv(_temp_path)
-            PM25_df.fillna('null', inplace=True)
-            self.pm25_cmaq_json = PM25_df.to_dict('records')
-        return self.pm25_cmaq_json
+        df = pd.read_csv(_temp_path)
+        df.fillna('null', inplace=True)
+        if start_time is not None and end_time is not None:
+            df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
+            print('t', df.shape)
+        PM_json = df.to_dict('records')
+        return PM_json
 
-    def read_wind_by_stations(self):
+    def read_wind_by_stations(self, start_time = None, end_time = None):
         """
         :return:
         """
         _temp_path = './data/Wind_obs_by_stations.csv'
-        if self.wind_json is None:
-            PM25_df = pd.read_csv(_temp_path)
-            PM25_df.fillna('null', inplace=True)
-            self.wind_json = PM25_df.to_dict('records')
-        return self.wind_json
+        df = pd.read_csv(_temp_path)
+        df.fillna('null', inplace=True)
+        if start_time is not None and end_time is not None:
+            df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
+            print('t', df.shape)
+        mete_json = df.to_dict('records')
+        return mete_json
 
-    def read_winddir_by_stations(self):
+    def read_winddir_by_stations(self, start_time = None, end_time = None):
         """
         :return:
         """
         _temp_path = './data/WindDir_obs_by_stations.csv'
-        if self.winddir_json is None:
-            PM25_df = pd.read_csv(_temp_path)
-            start_time = time.time()
-            PM25_df.fillna('null', inplace=True)
-            self.winddir_json = PM25_df.to_dict('records')
-            print('WindDir obs usage time: ', time.time() - start_time)
-        return self.winddir_json
+        df = pd.read_csv(_temp_path)
+        df.fillna('null', inplace=True)
+        if start_time is not None and end_time is not None:
+            df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
+            print('t', df.shape)
+        mete_json = df.to_dict('records')
+        return mete_json
 
-    def read_wind_WRF_by_stations(self):
+    def read_wind_WRF_by_stations(self, start_time = None, end_time = None):
         """
         :return:
         """
         _temp_path = './data/Wind_WRF_by_stations.csv'
-        if self.wind_wrf_json is None:
-            PM25_df = pd.read_csv(_temp_path)
-            start_time = time.time()
-            PM25_df.fillna('null', inplace=True)
-            self.wind_wrf_json = PM25_df.to_dict('records')
+        df = pd.read_csv(_temp_path)
+        df.fillna('null', inplace=True)
+        if start_time is not None and end_time is not None:
+            df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
+            print('t', df.shape)
+        mete_json = df.to_dict('records')
+        return mete_json
 
-            print('Wind WRF obs usage time: ', time.time() - start_time)
-        return self.wind_wrf_json
-
-    def read_winddir_WRF_by_stations(self):
+    def read_winddir_WRF_by_stations(self, start_time = None, end_time = None):
         """
 
         :return:
         """
         _temp_path = './data/WindDir_WRF_by_stations.csv'
-        if self.winddir_wrf_json is None:
-            PM25_df = pd.read_csv(_temp_path)
-            start_time = time.time()
-            PM25_df.fillna('null', inplace=True)
-            self.winddir_wrf_json = PM25_df.to_dict('records')
-            print('WindDir WRF obs usage time: ', time.time() - start_time)
-        return self.winddir_wrf_json
+        df = pd.read_csv(_temp_path)
+        df.fillna('null', inplace=True)
+        if start_time is not None and end_time is not None:
+            df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
+            print('t', df.shape)
+        mete_json = df.to_dict('records')
+        return mete_json
+
 if __name__ == '__main__':
     dataService = DataService(None)
     dataService.get_recent_records(0, 100)
