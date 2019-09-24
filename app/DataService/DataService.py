@@ -29,7 +29,7 @@ class DataService:
         Hard code
         """
         self.region_df = pd.read_csv(path)
-        with open('./config/config.json') as f:
+        with open("./config/config.json") as f:
             self.config = json.load(f)
         # self.region_dicts = self.region_df.drop(columns=['col_index', 'row_index']).to_dict('records')
         self.region_dicts = self.region_df.to_dict('records')
@@ -76,6 +76,43 @@ class DataService:
         mete_stations_df = pd.read_csv(self.config["mete_stations_path"])
         return mete_stations_df.to_dict('records')
 
+    def read_obs_feature(self, ids, feature, timeRange = 1):
+        obs_feature_df = pd.read_csv(self.config[feature+"_obs_agg"][str(timeRange)+"h"])
+        if ids == 'all':
+            result = obs_feature_df
+        else:
+            column = ['timestamp']
+            for i in ids:
+                column.append(str(i))
+            result = obs_feature_df[column]
+        result.fillna('null', inplace=True)
+        return result.to_dict('records')
+
+    def read_error_feature(self, ids, feature, timeRange = 1):
+        error_feature_df = pd.read_csv(self.config[feature+"_error_agg"][str(timeRange)+"h"])
+        if ids == 'all':
+            result = error_feature_df
+        else:
+            column = ['timestamp']
+            for i in ids:
+                column.append(str(i))
+            result = error_feature_df[column]
+        result.fillna('null', inplace=True)
+        return result.to_dict('records')
+
+
+    def read_model_feature(self, ids, feature, timeRange = 1):
+        model_feature_df = pd.read_csv(self.config[feature+"_model_agg"][str(timeRange)+"h"])
+        if ids == 'all':
+            result = model_feature_df
+        else:
+            column = ['timestamp']
+            for i in ids:
+                column.append(str(i))
+            result = model_feature_df[column]
+        result.fillna('null', inplace=True)
+        return result.to_dict('records')
+
 if __name__ == '__main__':
     dataService = DataService()
-    dataService.read_aq_stations()
+    # dataService.read_aq_stations()

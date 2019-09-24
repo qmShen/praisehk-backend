@@ -1,4 +1,71 @@
 {
-    "aq_stations_path" : "./data/aq_stations.csv",
-    "mete_stations_path" : "./data/mete_stations.csv"
+    "aq_stations_path": "./data/aq_stations.csv",
+    "mete_stations_path": "./data/mete_stations.csv",
+
+    "PM25_obs_path": "./data/PM25_obs.csv",
+    "Wind_obs_path": "./data/Wind_obs.csv",
+    "WindDir_obs_path": "./data/WindDir_obs.csv",
+
+    "PM25_error_path": "./data/PM25_error.csv",
+    "Wind_error_path": "./data/Wind_error.csv",
+    "WindDir_error_path": "./data/WindDir_error.csv",
+
+    "PM25_model_path": "./data/PM25_cmaq.csv",
+    "Wind_model_path": "./data/Wind_wrf.csv",
+    "WindDir_model_path": "./data/WindDir_wrf.csv",
+
+    "PM25_obs_agg": {
+        "1h": "./data/PM25_obs_agg1h.csv",
+        "3h": "./data/PM25_obs_agg3h.csv",
+        "6h": "./data/PM25_obs_agg6h.csv",
+        "12h": "./data/PM25_obs_agg12h.csv"
+    },
+    "Wind_obs_agg": {
+        "1h": "./data/Wind_obs_agg1h.csv",
+        "3h": "./data/Wind_obs_agg3h.csv",
+        "6h": "./data/Wind_obs_agg6h.csv",
+        "12h": "./data/Wind_obs_agg12h.csv"
+    },
+    "WindDir_obs_agg": {
+        "1h": "./data/WindDir_obs_agg1h.csv",
+        "3h": "./data/WindDir_obs_agg3h.csv",
+        "6h": "./data/WindDir_obs_agg6h.csv",
+        "12h": "./data/WindDir_obs_agg12h.csv"
+    },
+    "PM25_error_agg": {
+        "1h": "./data/PM25_error_agg1h.csv",
+        "3h": "./data/PM25_error_agg3h.csv",
+        "6h": "./data/PM25_error_agg6h.csv",
+        "12h": "./data/PM25_error_agg12h.csv"
+    },
+    "Wind_error_agg": {
+        "1h": "./data/Wind_error_agg1h.csv",
+        "3h": "./data/Wind_error_agg3h.csv",
+        "6h": "./data/Wind_error_agg6h.csv",
+        "12h": "./data/Wind_error_agg12h.csv"
+    },
+    "WindDir_error_agg": {
+        "1h": "./data/WindDir_error_agg1h.csv",
+        "3h": "./data/WindDir_error_agg3h.csv",
+        "6h": "./data/WindDir_error_agg6h.csv",
+        "12h": "./data/WindDir_error_agg12h.csv"
+    },
+    "PM25_model_agg": {
+        "1h": "./data/PM25_cmaq_agg1h.csv",
+        "3h": "./data/PM25_cmaq_agg3h.csv",
+        "6h": "./data/PM25_cmaq_agg6h.csv",
+        "12h": "./data/PM25_cmaq_agg12h.csv"
+    },
+    "Wind_model_agg": {
+        "1h": "./data/Wind_wrf_agg1h.csv",
+        "3h": "./data/Wind_wrf_agg3h.csv",
+        "6h": "./data/Wind_wrf_agg6h.csv",
+        "12h": "./data/Wind_wrf_agg12h.csv"
+    },
+    "WindDir_model_agg": {
+        "1h": "./data/WindDir_wrf_agg1h.csv",
+        "3h": "./data/WindDir_wrf_agg3h.csv",
+        "6h": "./data/WindDir_wrf_agg6h.csv",
+        "12h": "./data/WindDir_wrf_agg12h.csv"
+    }
 }

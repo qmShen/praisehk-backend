@@ -51,5 +51,24 @@ def get_mete_stations():
     data = dataService.read_mete_stations()
     return json.dumps(data)
 
+@app.route('/load_observation', methods = ['POST'])
+def get_obs_feature():
+    post_data = json.loads(request.data.decode())
+    data = dataService.read_obs_feature(post_data['ids'], post_data['feature'], post_data['timeRange'])
+    return json.dumps(data)
+
+@app.route('/load_errors', methods = ['POST'])
+def get_error_feature():
+    post_data = json.loads(request.data.decode())
+    data = dataService.read_error_feature(post_data['ids'], post_data['feature'], post_data['timeRange'])
+    return json.dumps(data)
+
+@app.route('/load_model_value', methods = ['POST'])
+def get_model_feature():
+    post_data = json.loads(request.data.decode())
+    data = dataService.read_model_feature(post_data['ids'], post_data['feature'], post_data['timeRange'])
+    return json.dumps(data)
+
+
 if __name__ == '__main__':
     pass
