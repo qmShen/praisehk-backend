@@ -1,4 +1,5 @@
+from app.DataService.DataService import DataService
 
-from src.test import p
+dataService = DataService()
 
-print('xx', p)
+dataService.read_station_info_test()

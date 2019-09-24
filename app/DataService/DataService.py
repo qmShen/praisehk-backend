@@ -34,7 +34,6 @@ class DataService:
         self.region_df = pd.read_csv(path)
         self.aq_station_df = pd.read_csv(aq_station_path)
         self.mete_station_df = pd.read_csv(mete_station_path)
-        # self.region_dicts = self.region_df.drop(columns=['col_index', 'row_index']).to_dict('records')
         self.region_dicts = self.region_df.to_dict('records')
 
 
@@ -44,6 +43,8 @@ class DataService:
         self.winddir_json = None
         self.wind_wrf_json = None
         self.winddir_wrf_json = None
+        self.cmaqid_2_stationid_map = None
+
     def get_regions(self):
         return self.region_dicts
 
@@ -52,8 +53,10 @@ class DataService:
         None
         :return:  stations data{id, longitude, latitude, WRF_id, CMAQ_id, [missing_rate_<feature_name>]}
         """
+        aq_station_path = './data/version0/aq_stations.csv'
         aq_station_df = pd.read_csv(aq_station_path)
         data = aq_station_df.to_dict('records')
+        self.cmaqid_2_stationid_map = dict(zip(aq_station_df['CMAQ_id'].astype(str), aq_station_df['id'].astype(str)))
         return data
 
 
@@ -62,7 +65,9 @@ class DataService:
         None
         :return:  stations data{id, longitude, latitude, WRF_id, CMAQ_id, [missing_rate_<feature_name>]}
         """
+        mete_station_path = './data/version0/mete_stations.csv'
         mete_station_df = pd.read_csv(mete_station_path)
+        self.wrfid_2_stationid_map = dict(zip(mete_station_df['WRF_id'].astype(str), mete_station_df['id'].astype(str)))
         data = mete_station_df.to_dict('records')
         return data
 
@@ -95,14 +100,14 @@ class DataService:
                 'feature': 'PM25',
                 'value': PM25_df.to_dict('records')
             },
-            {
-                'feature': 'wind',
-                'value': wind_df.to_dict('records')
-            },
-            {
-                'feature': 'windDir',
-                'value': winddir_df.to_dict('records')
-            }
+            # {
+            #     'feature': 'wind',
+            #     'value': wind_df.to_dict('records')
+            # },
+            # {
+            #     'feature': 'windDir',
+            #     'value': winddir_df.to_dict('records')
+            # }
         ]
 
         return data
@@ -118,13 +123,13 @@ class DataService:
         :return:
         """
         _temp_path = './data/PM25_obs_by_stations.csv'
-
+        _temp_path = './data/version0/PM25_obs_agg1h.csv'
         PM25_df = pd.read_csv(_temp_path)
-        PM25_df.fillna('null', inplace=True)
         print('start_time, end_time', start_time, end_time)
         if start_time is not None and end_time is not None:
             PM25_df = PM25_df[(PM25_df['timestamp'] >= start_time) & (PM25_df['timestamp'] <= end_time)]
             print('t', PM25_df.shape)
+        PM25_df.fillna('null', inplace=True)
         PM_json = PM25_df.to_dict('records')
         return PM_json
 
@@ -132,12 +137,15 @@ class DataService:
         """
         :return:
         """
-        _temp_path = './data/PM25_CMAQ_by_stations.csv'
+        _temp_path = './data/version0/PM25_cmaq_agg1h.csv'
         df = pd.read_csv(_temp_path)
-        df.fillna('null', inplace=True)
+        print('read data ', _temp_path, start_time, end_time)
+
+        df = df.rename(columns = self.cmaqid_2_stationid_map)
         if start_time is not None and end_time is not None:
             df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
             print('t', df.shape)
+        df.fillna('null', inplace=True)
         PM_json = df.to_dict('records')
         return PM_json
 
@@ -146,11 +154,12 @@ class DataService:
         :return:
         """
         _temp_path = './data/Wind_obs_by_stations.csv'
+        _temp_path = './data/version0/Wind_obs_agg1h.csv'
         df = pd.read_csv(_temp_path)
-        df.fillna('null', inplace=True)
         if start_time is not None and end_time is not None:
             df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
             print('t', df.shape)
+        df.fillna('null', inplace=True)
         mete_json = df.to_dict('records')
         return mete_json
 
@@ -159,11 +168,13 @@ class DataService:
         :return:
         """
         _temp_path = './data/WindDir_obs_by_stations.csv'
+        _temp_path = './data/version0/WindDir_obs_agg1h.csv'
         df = pd.read_csv(_temp_path)
-        df.fillna('null', inplace=True)
+
         if start_time is not None and end_time is not None:
             df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
             print('t', df.shape)
+        df.fillna('null', inplace=True)
         mete_json = df.to_dict('records')
         return mete_json
 
@@ -172,11 +183,13 @@ class DataService:
         :return:
         """
         _temp_path = './data/Wind_WRF_by_stations.csv'
+        _temp_path = './data/version0/Wind_wrf_agg1h.csv'
         df = pd.read_csv(_temp_path)
-        df.fillna('null', inplace=True)
+        df = df.rename(columns = self.wrfid_2_stationid_map)
         if start_time is not None and end_time is not None:
             df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
             print('t', df.shape)
+        df.fillna('null', inplace=True)
         mete_json = df.to_dict('records')
         return mete_json
 
@@ -186,11 +199,13 @@ class DataService:
         :return:
         """
         _temp_path = './data/WindDir_WRF_by_stations.csv'
+        _temp_path = './data/version0/WindDir_wrf_agg1h.csv'
         df = pd.read_csv(_temp_path)
-        df.fillna('null', inplace=True)
+        df = df.rename(columns=self.wrfid_2_stationid_map)
         if start_time is not None and end_time is not None:
             df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
             print('t', df.shape)
+        df.fillna('null', inplace=True)
         mete_json = df.to_dict('records')
         return mete_json
 
