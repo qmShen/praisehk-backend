@@ -83,18 +83,23 @@ class DataService:
 
 
     def read_feature_data(self, start_time = None, end_time = None):
+        PM25_path_3km = './data/version0/PM25_error_agg3h.csv'
+        wind_path_3km = './data/version0/Wind_error_agg3h.csv'
+
+        winddir_path_3km = './data/version0/WindDir_error_agg3h.csv'
+
         wind_df = pd.read_csv(wind_path_3km)
         PM25_df = pd.read_csv(PM25_path_3km)
         winddir_df = pd.read_csv(winddir_path_3km)
-        wind_df.fillna('null', inplace = True)
-        PM25_df.fillna('null', inplace = True)
-        winddir_df.fillna('null', inplace = True)
+
         print('result', start_time, end_time)
         if start_time is not None and end_time is not None:
             PM25_df = PM25_df[(PM25_df['timestamp'] >= start_time) & (PM25_df['timestamp'] <= end_time)]
             wind_df = wind_df[(wind_df['timestamp'] >= start_time) & (wind_df['timestamp'] <= end_time)]
             winddir_df = winddir_df[(winddir_df['timestamp'] >= start_time) & (winddir_df['timestamp'] <= end_time)]
-
+            wind_df.fillna('null', inplace=True)
+            PM25_df.fillna('null', inplace=True)
+            winddir_df.fillna('null', inplace=True)
         data = [
             {
                 'feature': 'PM25',
@@ -113,10 +118,23 @@ class DataService:
         return data
 
     def read_station_cmaq_obs(self, station_id, hour = 1):
-        PM25_path_3km = './data/station/{}_PM25_{}h.csv'.format(station_id, hour)
-        PM25_df = pd.read_csv(PM25_path_3km)
-        PM25_df.fillna('null', inplace=True)
-        return PM25_df.to_dict('records')
+        # Now
+        PM_obs_path = './data/version0/PM25_obs_agg1h.csv'
+        PM_CMAQ_path = './data/version0/PM25_cmaq_agg1h.csv'
+        PM_CMAQ_df = pd.read_csv(PM_CMAQ_path)
+        PM_obs_df = pd.read_csv(PM_obs_path)
+        PM_CMAQ_df = PM_CMAQ_df.rename(columns=self.cmaqid_2_stationid_map)
+
+        _PM_CMAQ_df = PM_CMAQ_df[['timestamp', station_id]].rename(columns={station_id: 'val_aq'})
+        _PM_obs_df = PM_obs_df[['timestamp', station_id]].rename(columns={station_id: 'val_cmaq'})
+        merge_new_df = pd.merge(_PM_CMAQ_df, _PM_obs_df, how='outer', left_on='timestamp', right_on='timestamp')
+        merge_new_df.fillna('null', inplace=True)
+
+        return merge_new_df.to_dict('records')
+        # PM25_path_3km = './data/station/{}_PM25_{}h.csv'.format(station_id, hour)
+        # PM25_df = pd.read_csv(PM25_path_3km)
+        # PM25_df.fillna('null', inplace=True)
+        # return PM25_df.to_dict('records')
 
     def read_AQ_by_stations(self, start_time = None, end_time = None):
         """
