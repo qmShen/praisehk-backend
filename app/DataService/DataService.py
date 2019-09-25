@@ -125,8 +125,8 @@ class DataService:
         PM_obs_df = pd.read_csv(PM_obs_path)
         PM_CMAQ_df = PM_CMAQ_df.rename(columns=self.cmaqid_2_stationid_map)
 
-        _PM_CMAQ_df = PM_CMAQ_df[['timestamp', station_id]].rename(columns={station_id: 'val_aq'})
-        _PM_obs_df = PM_obs_df[['timestamp', station_id]].rename(columns={station_id: 'val_cmaq'})
+        _PM_CMAQ_df = PM_CMAQ_df[['timestamp', station_id]].rename(columns={station_id: 'val_cmaq'})
+        _PM_obs_df = PM_obs_df[['timestamp', station_id]].rename(columns={station_id: 'val_aq'})
         merge_new_df = pd.merge(_PM_CMAQ_df, _PM_obs_df, how='outer', left_on='timestamp', right_on='timestamp')
         merge_new_df.fillna('null', inplace=True)
 
