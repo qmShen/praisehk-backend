@@ -240,10 +240,8 @@ class DataService:
         result['timestamp']  = df['timestamp']
         result['error'] = error
 
-        print(result)
         result.fillna('null', inplace=True)
         mete_json = result.to_dict('records')
-        print(mete_json)
         return mete_json
 
 if __name__ == '__main__':
