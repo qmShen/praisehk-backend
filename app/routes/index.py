@@ -12,8 +12,12 @@ print('here')
 
 @app.route('/')
 def index():
-
     return app.send_static_file('index.html')
+
+
+@app.route('/test')
+def test():
+    return "test"
 
 @app.route('/cmaq_region')
 def getregion():

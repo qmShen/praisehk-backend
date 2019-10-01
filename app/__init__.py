@@ -6,7 +6,6 @@ from flask_cors import CORS
 app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-# mongo = PyMongo(app)
 
 # flask_cors: Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
 CORS(app)
