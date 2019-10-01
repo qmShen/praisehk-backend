@@ -227,6 +227,25 @@ class DataService:
         mete_json = df.to_dict('records')
         return mete_json
 
+    def read_PM25_mean_error(self, start_time = None, end_time = None):
+        _temp_path = './data/version0/PM25_error_agg1h.csv'
+        df = pd.read_csv(_temp_path)
+        if start_time is not None and end_time is not None:
+            df = df[(df['timestamp'] >= start_time) & (df['timestamp'] < end_time)]
+
+        HongKongStationList = [67, 68, 70, 74, 77, 78, 79, 80, 81, 82, 83, 84, 85, 87, 89, 90]
+        HKS = [str(i) for i in HongKongStationList]
+        error = df[HKS].mean(1)
+        result = pd.DataFrame()
+        result['timestamp']  = df['timestamp']
+        result['error'] = error
+
+        print(result)
+        result.fillna('null', inplace=True)
+        mete_json = result.to_dict('records')
+        print(mete_json)
+        return mete_json
+
 if __name__ == '__main__':
     dataService = DataService(None)
     dataService.get_recent_records(0, 100)

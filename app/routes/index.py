@@ -100,6 +100,15 @@ def read_CMAQ_by_station():
     return json.dumps(data)
 
 
+@app.route('/load_mean_error', methods = ['POST'])
+def read_mean_error():
+    post_data = json.loads(request.data.decode())
+    st = post_data['startTime'] if 'startTime' in post_data else None
+    et = post_data['endTime'] if 'endTime' in post_data else None
+    start_time = time.time()
+    data = dataService.read_PM25_mean_error(st, et)
+    print('Get mean error of HK stations, use time: ', time.time() - start_time)
+    return json.dumps(data)
 
 
 if __name__ == '__main__':
