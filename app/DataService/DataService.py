@@ -260,7 +260,7 @@ class DataService:
             file.write('{}, {}, {}, {}, {}\n'.format(user, label, feature, start_time, end_time))
 
 
-    def save_label_to_db(self, start_time = None, end_time = None, user = None, label = None, feature = 'PM25'):
+    def save_label_to_db(self, start_time = None, end_time = None, user = None, label = None, feature = 'PM25', stationId = None):
         """
         startTime, endTime, userName, label
         :return:
@@ -270,7 +270,8 @@ class DataService:
             'endTime': end_time,
             'userName': user,
             'label': label,
-            'feature': feature
+            'feature': feature,
+            'stationId': stationId
         })
         pass
 if __name__ == '__main__':
