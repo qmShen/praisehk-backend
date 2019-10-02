@@ -101,10 +101,11 @@ class DataService:
             PM25_df.fillna('null', inplace=True)
             winddir_df.fillna('null', inplace=True)
             print('columns', PM25_df.columns)
+        PM_dicts = PM25_df.to_dict('records')
         data = [
             {
                 'feature': 'PM25',
-                'value': PM25_df.to_dict('records')
+                'value': PM_dicts
             },
             # {
             #     'feature': 'wind',
@@ -115,7 +116,7 @@ class DataService:
             #     'value': winddir_df.to_dict('records')
             # }
         ]
-
+        print('PM_dicts', PM_dicts[0])
         return data
 
     def read_station_cmaq_obs(self, station_id, hour = 1):
