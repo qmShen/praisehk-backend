@@ -31,6 +31,10 @@ class DataService:
         """
         Hard code
         """
+        self.client = MongoClient('127.0.0.1', 27017)
+        self.db = self.client['Praise_hk_label']
+        self.collection = self.db['label']
+
         self.region_df = pd.read_csv(path)
         self.aq_station_df = pd.read_csv(aq_station_path)
         self.mete_station_df = pd.read_csv(mete_station_path)
@@ -257,6 +261,19 @@ class DataService:
             file.write('{}, {}, {}, {}, {}'.format(user, label, feature, start_time, end_time))
 
 
+    def save_label_to_db(self, start_time = None, end_time = None, user = None, label = None, feature = 'PM25'):
+        """
+        startTime, endTime, userName, label
+        :return:
+        """
+        self.collection.insert_one({
+            'startTime': start_time,
+            'endTime': end_time,
+            'userName': user,
+            'label': label,
+            'feature': feature
+        })
+        pass
 if __name__ == '__main__':
     dataService = DataService(None)
     dataService.get_recent_records(0, 100)
