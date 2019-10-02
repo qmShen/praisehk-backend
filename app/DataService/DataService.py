@@ -27,7 +27,6 @@ aq_station_path = './data/region_config/loc_aq_2016_3km.csv'
 mete_station_path = './data/region_config/loc_mete_2016_3km.csv'
 class DataService:
     def __init__(self):
-        pass
         """
         Hard code
         """

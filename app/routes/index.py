@@ -121,8 +121,19 @@ def save_label_names():
     feature = post_data['feature'] if 'feature' in post_data else None
 
     if (st is not None) or (et is not None) or (user is not None) or (label is not None) or (feature is not None):
-        dataService.save_label_data(st, et, user, label, feature)
+        dataService.save_label_to_db(st, et, user, label, feature)
     return ''
+# def save_label_names():
+#     post_data = json.loads(request.data.decode())
+#     st = post_data['startTime'] if 'startTime' in post_data else None
+#     et = post_data['endTime'] if 'endTime' in post_data else None
+#     user = post_data['username'] if 'username' in post_data else None
+#     label = post_data['label'] if 'label' in post_data else None
+#     feature = post_data['feature'] if 'feature' in post_data else None
+#
+#     if (st is not None) or (et is not None) or (user is not None) or (label is not None) or (feature is not None):
+#         dataService.save_label_data(st, et, user, label, feature)
+#     return ''
 
 
 
