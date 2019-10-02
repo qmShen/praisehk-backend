@@ -227,6 +227,15 @@ class DataService:
         mete_json = df.to_dict('records')
         return mete_json
 
+    def save_label_data(self, start_time = None, end_time = None, user = None, label = None, feature = None):
+        """
+
+        :return:
+        """
+        _temp_path = './data/labeling_data_by_user.csv'
+        with open(_temp_path, 'a+') as file:
+            file.write('{}, {}, {}, {}, {}'.format(user, label, feature, start_time, end_time))
+
 if __name__ == '__main__':
     dataService = DataService(None)
     dataService.get_recent_records(0, 100)
