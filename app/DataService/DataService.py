@@ -92,7 +92,7 @@ class DataService:
         PM25_df = pd.read_csv(PM25_path_3km)
         winddir_df = pd.read_csv(winddir_path_3km)
 
-        print('result', start_time, end_time)
+
         if start_time is not None and end_time is not None:
             PM25_df = PM25_df[(PM25_df['timestamp'] >= start_time) & (PM25_df['timestamp'] <= end_time)]
             wind_df = wind_df[(wind_df['timestamp'] >= start_time) & (wind_df['timestamp'] <= end_time)]
@@ -101,11 +101,11 @@ class DataService:
             PM25_df.fillna('null', inplace=True)
             winddir_df.fillna('null', inplace=True)
             print('columns', PM25_df.columns)
-        PM_dicts = PM25_df.to_dict('records')
+
         data = [
             {
                 'feature': 'PM25',
-                'value': PM_dicts
+                'value': PM25_df.to_dict('records')
             },
             # {
             #     'feature': 'wind',
@@ -116,12 +116,11 @@ class DataService:
             #     'value': winddir_df.to_dict('records')
             # }
         ]
-        print('PM_dicts', PM_dicts[0])
+
         return data
 
     def read_station_cmaq_obs(self, station_id, hour = 1):
         # Now
-        print('test station id', station_id);
         PM_obs_path = './data/version0/PM25_obs_agg1h.csv'
         PM_CMAQ_path = './data/version0/PM25_cmaq_agg1h.csv'
         PM_CMAQ_df = pd.read_csv(PM_CMAQ_path)
