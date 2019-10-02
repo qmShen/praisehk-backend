@@ -119,6 +119,7 @@ class DataService:
 
     def read_station_cmaq_obs(self, station_id, hour = 1):
         # Now
+        print('test station id', station_id);
         PM_obs_path = './data/version0/PM25_obs_agg1h.csv'
         PM_CMAQ_path = './data/version0/PM25_cmaq_agg1h.csv'
         PM_CMAQ_df = pd.read_csv(PM_CMAQ_path)
