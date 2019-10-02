@@ -105,7 +105,7 @@ def save_label_names():
     feature = post_data['feature'] if 'feature' in post_data else None
     if st is not None | et is not None | user is not None | label is not None | feature is not None:
         dataService.save_label_data(st, et, user, label, feature)
-    return app.send_static_file('index.html')
+    return ''
 
 
 if __name__ == '__main__':
