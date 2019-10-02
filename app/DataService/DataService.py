@@ -229,6 +229,7 @@ class DataService:
         mete_json = df.to_dict('records')
         return mete_json
 
+
     def read_PM25_mean_error(self, start_time = None, end_time = None):
         _temp_path = './data/version0/PM25_error_agg1h.csv'
         df = pd.read_csv(_temp_path)
@@ -245,6 +246,16 @@ class DataService:
         result.fillna('null', inplace=True)
         mete_json = result.to_dict('records')
         return mete_json
+
+    def save_label_data(self, start_time = None, end_time = None, user = None, label = None, feature = None):
+        """
+
+        :return:
+        """
+        _temp_path = './data/labeling_data_by_user.csv'
+        with open(_temp_path, 'a+') as file:
+            file.write('{}, {}, {}, {}, {}'.format(user, label, feature, start_time, end_time))
+
 
 if __name__ == '__main__':
     dataService = DataService(None)

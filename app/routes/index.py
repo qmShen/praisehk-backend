@@ -100,6 +100,7 @@ def read_CMAQ_by_station():
     return json.dumps(data)
 
 
+
 @app.route('/load_mean_error', methods = ['POST'])
 def read_mean_error():
     post_data = json.loads(request.data.decode())
@@ -109,6 +110,19 @@ def read_mean_error():
     data = dataService.read_PM25_mean_error(st, et)
     print('Get mean error of HK stations, use time: ', time.time() - start_time)
     return json.dumps(data)
+
+@app.route('/save_labels', methods = ['POST'])
+def save_label_names():
+    post_data = json.loads(request.data.decode())
+    st = post_data['startTime'] if 'startTime' in post_data else None
+    et = post_data['endTime'] if 'endTime' in post_data else None
+    user = post_data['username'] if 'username' in post_data else None
+    label = post_data['label'] if 'label' in post_data else None
+    feature = post_data['feature'] if 'feature' in post_data else None
+    if st is not None | et is not None | user is not None | label is not None | feature is not None:
+        dataService.save_label_data(st, et, user, label, feature)
+    return app.send_static_file('index.html')
+
 
 
 if __name__ == '__main__':
