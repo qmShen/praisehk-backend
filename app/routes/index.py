@@ -119,9 +119,10 @@ def save_label_names():
     user = post_data['username'] if 'username' in post_data else None
     label = post_data['label'] if 'label' in post_data else None
     feature = post_data['feature'] if 'feature' in post_data else None
-    if st is not None | et is not None | user is not None | label is not None | feature is not None:
+
+    if (st is not None) or (et is not None) or (user is not None) or (label is not None) or (feature is not None):
         dataService.save_label_data(st, et, user, label, feature)
-    return app.send_static_file('index.html')
+    return ''
 
 
 

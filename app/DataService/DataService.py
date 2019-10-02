@@ -258,7 +258,7 @@ class DataService:
         """
         _temp_path = './data/labeling_data_by_user.csv'
         with open(_temp_path, 'a+') as file:
-            file.write('{}, {}, {}, {}, {}'.format(user, label, feature, start_time, end_time))
+            file.write('{}, {}, {}, {}, {}\n'.format(user, label, feature, start_time, end_time))
 
 
     def save_label_to_db(self, start_time = None, end_time = None, user = None, label = None, feature = 'PM25'):
