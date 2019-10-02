@@ -100,6 +100,7 @@ class DataService:
             wind_df.fillna('null', inplace=True)
             PM25_df.fillna('null', inplace=True)
             winddir_df.fillna('null', inplace=True)
+            print('columns', PM25_df.columns)
         data = [
             {
                 'feature': 'PM25',
