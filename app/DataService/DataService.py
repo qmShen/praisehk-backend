@@ -260,18 +260,20 @@ class DataService:
             file.write('{}, {}, {}, {}, {}\n'.format(user, label, feature, start_time, end_time))
 
 
-    def save_label_to_db(self, start_time = None, end_time = None, user = None, label = None, feature = 'PM25', stationId = None):
+    def save_label_to_db(self, start_time = None, end_time = None, user = None, label = None, feature = 'PM25', stationId = None, labelType = None):
         """
         startTime, endTime, userName, label
         :return:
         """
         self.collection.insert_one({
+            "id": "{}_{}".format(user, time.time()),
             'startTime': start_time,
             'endTime': end_time,
             'userName': user,
             'label': label,
             'feature': feature,
-            'stationId': stationId
+            'stationId': stationId,
+            'labelType': labelType
         })
         pass
 if __name__ == '__main__':
