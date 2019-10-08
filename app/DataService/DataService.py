@@ -103,7 +103,6 @@ class DataService:
             wind_df.fillna('null', inplace=True)
             PM25_df.fillna('null', inplace=True)
             winddir_df.fillna('null', inplace=True)
-            print('columns', PM25_df.columns)
 
         data = [
             {
@@ -128,8 +127,10 @@ class DataService:
         PM_CMAQ_path = './data/version0/PM25_cmaq_agg1h.csv'
         PM_CMAQ_df = pd.read_csv(PM_CMAQ_path)
         PM_obs_df = pd.read_csv(PM_obs_path)
+
         PM_CMAQ_df = PM_CMAQ_df.rename(columns=self.cmaqid_2_stationid_map)
 
+        station_id = str(station_id)
         _PM_CMAQ_df = PM_CMAQ_df[['timestamp', station_id]].rename(columns={station_id: 'val_cmaq'})
         _PM_obs_df = PM_obs_df[['timestamp', station_id]].rename(columns={station_id: 'val_aq'})
         merge_new_df = pd.merge(_PM_CMAQ_df, _PM_obs_df, how='outer', left_on='timestamp', right_on='timestamp')
