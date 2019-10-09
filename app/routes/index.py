@@ -44,7 +44,7 @@ def get_feature_data():
 def get_cmaq_obs_data():
     post_data = json.loads(request.data.decode())
     print('Get cmaq and obversation ', post_data)
-    feature = post_data['feature'] if 'feature' in post_data else 'PM25'
+    feature = post_data['feature'] if 'feature' in post_data else 'NO2'
     print('feature feature', feature)
     data = dataService.read_station_cmaq_obs(post_data['stationId'], 1, feature)
     return json.dumps(data)
