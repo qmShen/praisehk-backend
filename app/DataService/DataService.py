@@ -276,7 +276,19 @@ class DataService:
             'stationId': stationId,
             'labelType': labelType
         })
-        pass
+
+    def load_lable_from_db(self, user = None, feature = 'PM25' ):
+        return [{
+            "id": "{}_{}".format(user, time.time()),
+            'startTime': 1539811600,
+            'endTime': 1540261200,
+            'userName': user,
+            'label': 'label',
+            'feature': 'feature',
+            'stationId': '80',
+            'labelType': 'over'
+        }]
+
 if __name__ == '__main__':
     dataService = DataService(None)
     dataService.get_recent_records(0, 100)
