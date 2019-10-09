@@ -234,8 +234,11 @@ class DataService:
         return mete_json
 
 
+
     def read_PM25_mean_error(self, start_time = None, end_time = None, feature = None):
         _temp_path = './data/version{}/{}_error_agg1h.csv'.format(self.version, feature)
+
+
         df = pd.read_csv(_temp_path)
         if start_time is not None and end_time is not None:
             df = df[(df['timestamp'] >= start_time) & (df['timestamp'] < end_time)]
@@ -251,15 +254,14 @@ class DataService:
         mete_json = result.to_dict('records')
         return mete_json
 
-    def save_label_data(self, start_time = None, end_time = None, user = None, label = None, feature = None):
-        """
-
-        :return:
-        """
-        _temp_path = './data/labeling_data_by_user.csv'
-        with open(_temp_path, 'a+') as file:
-            file.write('{}, {}, {}, {}, {}\n'.format(user, label, feature, start_time, end_time))
-
+    def load_label_from_db(self, user=None, feature='PM25'):
+        query_list = [
+            {'userName': user},
+            {'feature': feature}
+        ]
+        result = list(self.collection.find({'$and': query_list}))
+        print(result)
+        return result
 
     def save_label_to_db(self, start_time = None, end_time = None, user = None, label = None, feature = 'PM25', stationId = None, labelType = None):
         """
@@ -276,7 +278,30 @@ class DataService:
             'stationId': stationId,
             'labelType': labelType
         })
-        pass
+        return ''
+
+    def update_label_to_db(self, id, start_time = None, end_time = None, user = None, label = None, feature = 'PM25', stationId = None, labelType = None):
+        """
+        startTime, endTime, userName, label
+        :return:
+        """
+        self.collection.find_one_and_replace( {'id': id}, {
+            'id': id,
+            'startTime': start_time,
+            'endTime': end_time,
+            'userName': user,
+            'label': label,
+            'feature': feature,
+            'stationId': stationId,
+            'labelType': labelType
+        })
+        return ''
+
+    def delete_label_from_db(self, id):
+        self.collection.delete_one({'id': id})
+        return ''
+
+
 if __name__ == '__main__':
     dataService = DataService(None)
     dataService.get_recent_records(0, 100)
