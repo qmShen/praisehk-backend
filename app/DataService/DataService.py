@@ -25,6 +25,8 @@ winddir_path_3km = './data/WDIR_3h_abs.csv'
 
 aq_station_path = './data/region_config/loc_aq_2016_3km.csv'
 mete_station_path = './data/region_config/loc_mete_2016_3km.csv'
+
+version = '1'
 class DataService:
     def __init__(self):
         """
@@ -47,6 +49,7 @@ class DataService:
         self.wind_wrf_json = None
         self.winddir_wrf_json = None
         self.cmaqid_2_stationid_map = None
+        self.version = version
 
     def get_regions(self):
         return self.region_dicts
@@ -56,7 +59,7 @@ class DataService:
         None
         :return:  stations data{id, longitude, latitude, WRF_id, CMAQ_id, [missing_rate_<feature_name>]}
         """
-        aq_station_path = './data/version0/aq_stations.csv'
+        aq_station_path = './data/version{}/aq_stations.csv'.format(self.version)
         aq_station_df = pd.read_csv(aq_station_path)
         data = aq_station_df.to_dict('records')
         self.cmaqid_2_stationid_map = dict(zip(aq_station_df['CMAQ_id'].astype(str), aq_station_df['id'].astype(str)))
@@ -68,7 +71,7 @@ class DataService:
         None
         :return:  stations data{id, longitude, latitude, WRF_id, CMAQ_id, [missing_rate_<feature_name>]}
         """
-        mete_station_path = './data/version0/mete_stations.csv'
+        mete_station_path = './data/version{}/mete_stations.csv'.format(self.version)
         mete_station_df = pd.read_csv(mete_station_path)
         self.wrfid_2_stationid_map = dict(zip(mete_station_df['WRF_id'].astype(str), mete_station_df['id'].astype(str)))
         data = mete_station_df.to_dict('records')
@@ -85,11 +88,11 @@ class DataService:
         }
 
 
-    def read_feature_data(self, start_time = None, end_time = None):
-        PM25_path_3km = './data/version0/PM25_error_agg3h.csv'
-        wind_path_3km = './data/version0/Wind_error_agg3h.csv'
+    def read_feature_data(self, start_time = None, end_time = None, feature = None):
+        PM25_path_3km = './data/version{}/{}_error_agg3h.csv'.format(self.version, feature)
+        wind_path_3km = './data/version{}/Wind_error_agg3h.csv'.format(self.version)
 
-        winddir_path_3km = './data/version0/WindDir_error_agg3h.csv'
+        winddir_path_3km = './data/version{}/WindDir_error_agg3h.csv'.format(self.version)
 
         wind_df = pd.read_csv(wind_path_3km)
         PM25_df = pd.read_csv(PM25_path_3km)
@@ -106,7 +109,7 @@ class DataService:
 
         data = [
             {
-                'feature': 'PM25',
+                'feature': feature,
                 'value': PM25_df.to_dict('records')
             },
             # {
@@ -121,10 +124,10 @@ class DataService:
 
         return data
 
-    def read_station_cmaq_obs(self, station_id, hour = 1):
+    def read_station_cmaq_obs(self, station_id, hour = 1, feature = None):
         # Now
-        PM_obs_path = './data/version0/PM25_obs_agg1h.csv'
-        PM_CMAQ_path = './data/version0/PM25_cmaq_agg1h.csv'
+        PM_obs_path = './data/version{}/{}_obs_agg1h.csv'.format(self.version, feature)
+        PM_CMAQ_path = './data/version{}/{}_cmaq_agg1h.csv'.format(self.version, feature)
         PM_CMAQ_df = pd.read_csv(PM_CMAQ_path)
         PM_obs_df = pd.read_csv(PM_obs_path)
 
@@ -142,12 +145,11 @@ class DataService:
         # PM25_df.fillna('null', inplace=True)
         # return PM25_df.to_dict('records')
 
-    def read_AQ_by_stations(self, start_time = None, end_time = None):
+    def read_AQ_by_stations(self, start_time = None, end_time = None, feature = None):
         """
         :return:
         """
-        _temp_path = './data/PM25_obs_by_stations.csv'
-        _temp_path = './data/version0/PM25_obs_agg1h.csv'
+        _temp_path = './data/version{}/{}_obs_agg1h.csv'.format(self.version, feature)
         PM25_df = pd.read_csv(_temp_path)
         print('start_time, end_time', start_time, end_time)
         if start_time is not None and end_time is not None:
@@ -157,13 +159,13 @@ class DataService:
         PM_json = PM25_df.to_dict('records')
         return PM_json
 
-    def read_CMAQ_by_stations(self, start_time = None, end_time = None):
+    def read_CMAQ_by_stations(self, start_time = None, end_time = None, feature = None):
         """
         :return:
         """
-        _temp_path = './data/version0/PM25_cmaq_agg1h.csv'
+        _temp_path = './data/version{}/{}_cmaq_agg1h.csv'.format(self.version, feature)
         df = pd.read_csv(_temp_path)
-        print('read data ', _temp_path, start_time, end_time)
+        print('read data ', _temp_path, start_time, end_time, feature)
 
         df = df.rename(columns = self.cmaqid_2_stationid_map)
         if start_time is not None and end_time is not None:
@@ -177,8 +179,7 @@ class DataService:
         """
         :return:
         """
-        _temp_path = './data/Wind_obs_by_stations.csv'
-        _temp_path = './data/version0/Wind_obs_agg1h.csv'
+        _temp_path = './data/version{}/Wind_obs_agg1h.csv'.format(self.version)
         df = pd.read_csv(_temp_path)
         if start_time is not None and end_time is not None:
             df = df[(df['timestamp'] >= start_time) & (df['timestamp'] <= end_time)]
@@ -191,8 +192,7 @@ class DataService:
         """
         :return:
         """
-        _temp_path = './data/WindDir_obs_by_stations.csv'
-        _temp_path = './data/version0/WindDir_obs_agg1h.csv'
+        _temp_path = './data/version{}/WindDir_obs_agg1h.csv'.format(self.version)
         df = pd.read_csv(_temp_path)
 
         if start_time is not None and end_time is not None:
@@ -207,7 +207,7 @@ class DataService:
         :return:
         """
         _temp_path = './data/Wind_WRF_by_stations.csv'
-        _temp_path = './data/version0/Wind_wrf_agg1h.csv'
+        _temp_path = './data/version{}/Wind_wrf_agg1h.csv'.format(self.version)
         df = pd.read_csv(_temp_path)
         df = df.rename(columns = self.wrfid_2_stationid_map)
         if start_time is not None and end_time is not None:
@@ -223,7 +223,7 @@ class DataService:
         :return:
         """
         _temp_path = './data/WindDir_WRF_by_stations.csv'
-        _temp_path = './data/version0/WindDir_wrf_agg1h.csv'
+        _temp_path = './data/version{}/WindDir_wrf_agg1h.csv'.format(self.version)
         df = pd.read_csv(_temp_path)
         df = df.rename(columns=self.wrfid_2_stationid_map)
         if start_time is not None and end_time is not None:
@@ -234,8 +234,8 @@ class DataService:
         return mete_json
 
 
-    def read_PM25_mean_error(self, start_time = None, end_time = None):
-        _temp_path = './data/version0/PM25_error_agg1h.csv'
+    def read_PM25_mean_error(self, start_time = None, end_time = None, feature = None):
+        _temp_path = './data/version{}/{}_error_agg1h.csv'.format(self.version, feature)
         df = pd.read_csv(_temp_path)
         if start_time is not None and end_time is not None:
             df = df[(df['timestamp'] >= start_time) & (df['timestamp'] < end_time)]
