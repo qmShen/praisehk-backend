@@ -120,8 +120,9 @@ def load_labels():
     post_data = json.loads(request.data.decode())
     user = post_data['username'].lower() if 'username' in post_data else None
     feature = post_data['feature'] if 'feature' in post_data else None
+    station = post_data['station'] if 'station' in post_data else None
 
-    data = dataService.load_label_from_db(user, feature)
+    data = dataService.load_label_from_db(user, feature, station)
     return dumps(data)
 
 @app.route('/save_labels', methods = ['POST'])

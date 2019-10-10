@@ -251,13 +251,16 @@ class DataService:
         mete_json = result.to_dict('records')
         return mete_json
 
-    def load_label_from_db(self, user=None, feature='PM25'):
+    def load_label_from_db(self, user=None, feature='PM25', station=None):
         query_list = [
             {'userName': user},
             {'feature': feature}
         ]
+
+        if station is not None:
+            query_list.append({'stationId': station})
+
         result = list(self.collection.find({'$and': query_list}))
-        print(result)
         return result
 
     def save_label_to_db(self, start_time = None, end_time = None, user = None, label = None, feature = 'PM25', stationId = None, labelType = None):
