@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from app import app
 import json
+from bson.json_util import dumps
 from app.DataService.DataService import DataService
 from flask import request
 import pandas as pd
@@ -113,33 +114,54 @@ def read_mean_error():
     print('Get mean error of HK stations, use time: ', time.time() - start_time)
     return json.dumps(data)
 
+
+@app.route('/load_labels', methods = ['POST'])
+def load_labels():
+    post_data = json.loads(request.data.decode())
+    user = post_data['username'].lower() if 'username' in post_data else None
+    feature = post_data['feature'] if 'feature' in post_data else None
+
+    data = dataService.load_label_from_db(user, feature)
+    return dumps(data)
+
 @app.route('/save_labels', methods = ['POST'])
 def save_label_names():
     post_data = json.loads(request.data.decode())
     st = post_data['startTime'] if 'startTime' in post_data else None
     et = post_data['endTime'] if 'endTime' in post_data else None
-    user = post_data['username'] if 'username' in post_data else None
+    user = post_data['username'].lower() if 'username' in post_data else None
     label = post_data['label'] if 'label' in post_data else None
     feature = post_data['feature'] if 'feature' in post_data else None
     stationId = post_data['StationId'] if 'StationId' in post_data else None
     label_type = post_data['type'] if 'type' in post_data else None
 
-    if (st is not None) or (et is not None) or (user is not None) \
-            or (label is not None) or (feature is not None) or (stationId is not None):
-        dataService.save_label_to_db(st, et, user, label, feature, stationId, label_type);
+    dataService.save_label_to_db(st, et, user, label, feature, stationId, label_type);
     return ''
-# def save_label_names():
-#     post_data = json.loads(request.data.decode())
-#     st = post_data['startTime'] if 'startTime' in post_data else None
-#     et = post_data['endTime'] if 'endTime' in post_data else None
-#     user = post_data['username'] if 'username' in post_data else None
-#     label = post_data['label'] if 'label' in post_data else None
-#     feature = post_data['feature'] if 'feature' in post_data else None
-#
-#     if (st is not None) or (et is not None) or (user is not None) or (label is not None) or (feature is not None):
-#         dataService.save_label_data(st, et, user, label, feature)
-#     return ''
 
+
+@app.route('/modify_labels', methods = ['POST'])
+def modify_labels():
+    post_data = json.loads(request.data.decode())
+    id = post_data['id'] if 'id' in post_data else None
+    st = post_data['startTime'] if 'startTime' in post_data else None
+    et = post_data['endTime'] if 'endTime' in post_data else None
+    user = post_data['username'].lower() if 'username' in post_data else None
+    label = post_data['label'] if 'label' in post_data else None
+    feature = post_data['feature'] if 'feature' in post_data else None
+    stationId = post_data['StationId'] if 'StationId' in post_data else None
+    label_type = post_data['type'] if 'type' in post_data else None
+
+    dataService.update_label_to_db(id, st, et, user, label, feature, stationId, label_type);
+    return ''
+
+
+@app.route('/delete_labels', methods = ['POST'])
+def delete_labels():
+    post_data = json.loads(request.data.decode())
+    id = post_data['id'] if 'id' in post_data else None
+
+    dataService.delete_label_from_db(id)
+    return ''
 
 
 if __name__ == '__main__':
