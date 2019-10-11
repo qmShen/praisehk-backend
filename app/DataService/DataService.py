@@ -91,13 +91,11 @@ class DataService:
     def read_feature_data(self, start_time = None, end_time = None, feature = None):
         PM25_path_3km = './data/version{}/{}_error_agg3h.csv'.format(self.version, feature)
         wind_path_3km = './data/version{}/Wind_error_agg3h.csv'.format(self.version)
-
         winddir_path_3km = './data/version{}/WindDir_error_agg3h.csv'.format(self.version)
 
         wind_df = pd.read_csv(wind_path_3km)
         PM25_df = pd.read_csv(PM25_path_3km)
         winddir_df = pd.read_csv(winddir_path_3km)
-
 
         if start_time is not None and end_time is not None:
             PM25_df = PM25_df[(PM25_df['timestamp'] >= start_time) & (PM25_df['timestamp'] <= end_time)]
@@ -111,15 +109,7 @@ class DataService:
             {
                 'feature': feature,
                 'value': PM25_df.to_dict('records')
-            },
-            # {
-            #     'feature': 'wind',
-            #     'value': wind_df.to_dict('records')
-            # },
-            # {
-            #     'feature': 'windDir',
-            #     'value': winddir_df.to_dict('records')
-            # }
+            }
         ]
 
         return data
@@ -233,23 +223,20 @@ class DataService:
         mete_json = df.to_dict('records')
         return mete_json
 
-
-    def read_PM25_mean_error(self, start_time = None, end_time = None, feature = None):
+    def read_mean_error(self, start_time=None, end_time=None, feature=None):
         _temp_path = './data/version{}/{}_error_agg1h.csv'.format(self.version, feature)
         df = pd.read_csv(_temp_path)
         if start_time is not None and end_time is not None:
             df = df[(df['timestamp'] >= start_time) & (df['timestamp'] < end_time)]
 
-        HongKongStationList = [67, 68, 70, 74, 77, 78, 79, 80, 81, 82, 83, 84, 85, 87, 89, 90]
-        HKS = [str(i) for i in HongKongStationList]
-        error = df[HKS].mean(1)
+        hk_station_list = [67, 68, 70, 74, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 87, 90]
+        hk_station_list = [str(i) for i in hk_station_list]
+        error = df[hk_station_list].mean(1)
         result = pd.DataFrame()
-        result['timestamp']  = df['timestamp']
+        result['timestamp'] = df['timestamp']
         result['error'] = error
-
         result.fillna('null', inplace=True)
-        mete_json = result.to_dict('records')
-        return mete_json
+        return result.to_dict('records')
 
     def load_label_from_db(self, user=None, feature='PM25', station=None):
         query_list = [
