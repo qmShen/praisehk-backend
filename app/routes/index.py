@@ -127,12 +127,11 @@ def save_label_names():
     post_data = json.loads(request.data.decode())
     st = post_data['startTime'] if 'startTime' in post_data else None
     et = post_data['endTime'] if 'endTime' in post_data else None
-    user = post_data['username'].lower() if 'username' in post_data else None
+    user = post_data['userName'].lower() if 'userName' in post_data else None
     label = post_data['label'] if 'label' in post_data else None
     feature = post_data['feature'] if 'feature' in post_data else None
-    stationId = post_data['StationId'] if 'StationId' in post_data else None
-    label_type = post_data['type'] if 'type' in post_data else None
-
+    stationId = post_data['stationId'] if 'stationId' in post_data else None
+    label_type = post_data['labelType'] if 'labelType' in post_data else None
     dataService.save_label_to_db(st, et, user, label, feature, stationId, label_type);
     return ''
 
@@ -143,11 +142,11 @@ def modify_labels():
     id = post_data['id'] if 'id' in post_data else None
     st = post_data['startTime'] if 'startTime' in post_data else None
     et = post_data['endTime'] if 'endTime' in post_data else None
-    user = post_data['username'].lower() if 'username' in post_data else None
+    user = post_data['userName'].lower() if 'userName' in post_data else None
     label = post_data['label'] if 'label' in post_data else None
     feature = post_data['feature'] if 'feature' in post_data else None
-    stationId = post_data['StationId'] if 'StationId' in post_data else None
-    label_type = post_data['type'] if 'type' in post_data else None
+    stationId = post_data['stationId'] if 'stationId' in post_data else None
+    label_type = post_data['labelType'] if 'labelType' in post_data else None
 
     dataService.update_label_to_db(id, st, et, user, label, feature, stationId, label_type);
     return ''
